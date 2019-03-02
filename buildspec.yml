@@ -25,7 +25,7 @@ phases:
       # - command
   build:
     commands:
-      - echo Sat Mar  2 02:37:44 UTC 2019
+      - echo 'pull1'
       - pwd
       - ls
       - env
