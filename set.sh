@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sed -ie "s|echo.*|echo $(date)|g" buildspec.yml
+sed -i "s|echo.*|echo $(date)|g" buildspec.yml
