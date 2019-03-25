@@ -25,11 +25,11 @@ phases:
       # - command
   build:
     commands:
-      - echo Mon Mar 25 21:27:30 UTC 2019
+      - echo Mon Mar 25 21:31:19 UTC 2019
       - pwd
       - ls
       - env
-      - sh -xv ./scripts/build.sh
+      - bash -xv ./scripts/build.sh
       # - command
       # - command
     #finally:
