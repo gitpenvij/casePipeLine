@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sed -i "s|echo.*|echo $(date)|g" buildspec.yml
-git add .
-git commit -am "all good.."
+git add --all .
+git commit -am "${1}"
 
 git push 
