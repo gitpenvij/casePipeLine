@@ -9,7 +9,7 @@
                         "inputArtifacts": [], 
                         "name": "Source", 
                         "region": "us-east-1", 
-                        "namespace" : "SourceVariables", ""
+                        "namespace" : "SourceVariables",
                         "actionTypeId": {
                             "category": "Source", 
                             "owner": "ThirdParty", 
