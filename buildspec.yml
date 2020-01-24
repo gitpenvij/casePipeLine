@@ -18,11 +18,11 @@ phases:
       # - command
   pre_build:
     commands:
-      - echo Fri Jan 24 21:44:49 UTC 2020
+      - echo Fri Jan 24 22:44:30 UTC 2020
       - pwd
       - ls
       #- |
-      #  env | grep 'WEBHOOK' || echo Fri Jan 24 21:44:49 UTC 2020
+      #  env | grep 'WEBHOOK' || echo Fri Jan 24 22:44:30 UTC 2020
       # - git clone https://github.com/gitpenvij/casePipeline.git /tmp
       # - command
     #finally:
@@ -30,8 +30,12 @@ phases:
       # - command
   build:
     commands:
-      - echo Fri Jan 24 21:44:49 UTC 2020
+      - |
+        vmstat 2 > vmstat.out &
+        echo Fri Jan 24 22:44:30 UTC 2020
+      - echo Fri Jan 24 22:44:30 UTC 2020
       - printenv | egrep '^GIT.*|^CANDIDATE_ID.*'
+      - cat vmstat.out
       # - command
       # - command
     #finally:
