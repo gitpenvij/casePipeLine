@@ -1,0 +1,72 @@
+{
+    "pipeline": {
+        "roleArn": "arn:aws:iam::110298732239:role/service-role/AWSCodePipelineServiceRole-us-east-1-GitHUbVariables", 
+        "stages": [
+            {
+                "name": "Source", 
+                "actions": [
+                    {
+                        "inputArtifacts": [], 
+                        "name": "Source", 
+                        "region": "us-east-1", 
+                        "namespace" : "SourceVariables",
+                        "actionTypeId": {
+                            "category": "Source", 
+                            "owner": "ThirdParty", 
+                            "version": "1", 
+                            "provider": "GitHub"
+                        }, 
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ], 
+                        "configuration": {
+                            "Owner": "gitpenvij", 
+                            "Repo": "casePipeLine", 
+                            "PollForSourceChanges": "false", 
+                            "Branch": "master", 
+                            "OAuthToken": "****"
+                        }, 
+                        "runOrder": 1
+                    }
+                ]
+            }, 
+            {
+                "name": "Build", 
+                "actions": [
+                    {
+                        "inputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ], 
+                        "name": "Build", 
+                        "region": "us-east-1", 
+                        "actionTypeId": {
+                            "category": "Build", 
+                            "owner": "AWS", 
+                            "version": "1", 
+                            "provider": "CodeBuild"
+                        }, 
+                        "outputArtifacts": [
+                            {
+                                "name": "BuildArtifact"
+                            }
+                        ], 
+                        "configuration": {
+                            "ProjectName": "CaseBuild", 
+                            "EnvironmentVariables": "[ {\"name\":\"CANDIDATE_ID\",\"type\":\"PLAINTEXT\",\"value\":\"#{codepipeline.PipelineExecutionId}\"}, {\"name\":\"GIT_COMMIT_ID\",\"type\":\"PLAINTEXT\",\"value\":\"#{SourceVariables.CommitId}\"}, {\"name\":\"GIT_AUTHOR_DATE\",\"type\":\"PLAINTEXT\",\"value\":\"#{SourceVariables.AuthorDate}\"}, {\"name\":\"GIT_BRANCH_NAME\",\"type\":\"PLAINTEXT\",\"value\":\"#{SourceVariables.BranchName}\"}, {\"name\":\"GIT_COMMIT_MESSAGE\",\"type\":\"PLAINTEXT\",\"value\":\"#{SourceVariables.CommitMessage}\"} ]"
+                        }, 
+                        "runOrder": 1
+                    }
+                ]
+            }
+        ], 
+        "artifactStore": {
+            "type": "S3", 
+            "location": "codepipeline-us-east-1-297511987458"
+        }, 
+        "name": "GitHUbVariables"
+    } 
+}
