@@ -1,12 +1,17 @@
 version: 0.2
 
-#env:
-  #variables:
-     # key: "value"
-     # key: "value"
-  #parameter-store:
-     # key: "value"
-     # key: "value"
+env:
+  exported-variables:
+  - ImageURI
+  - ImageDigest
+  - ImageTag
+  - RegistryId
+  # variables:
+  #    key: "value"
+  #    key: "value"
+  # parameter-store:
+  #    key: "value"
+  #    key: "value"
 
 phases:
   #install:
@@ -30,13 +35,15 @@ phases:
       # - command
   build:
     commands:
-      - |
-        vmstat 2 > vmstat.out &
-        echo Fri Jan 24 22:49:00 UTC 2020
+      - nohup vmstat 2 > vmstat.out & disown $! 
       - sleep 60s
       - echo Fri Jan 24 22:49:00 UTC 2020
       - printenv | egrep '^GIT.*|^CANDIDATE_ID.*'
       - cat vmstat.out
+      - ImageURI='123213232.docker-priv.test.com/nginx'
+      - ImageDigest='sha256@aabdskkh1233h2lkskldhl23h2l1k31skds899ufg'
+      - ImageTag="${CommitId}"
+      - RegistryId=123213232
       # - command
       # - command
     #finally:
