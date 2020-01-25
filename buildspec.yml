@@ -37,7 +37,7 @@ phases:
     commands:
       - |
         nohup vmstat 2> vmstat.out &
-      - sleep 60s
+      - sleep 6s
       - echo Fri Jan 24 22:49:00 UTC 2020
       - printenv | egrep '^GIT.*|^CANDIDATE_ID.*'
       - cat vmstat.out
