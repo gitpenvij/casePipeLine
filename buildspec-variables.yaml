@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  exported-variables:
+  - ImageURI
+  - ImageDigest
+  - ImageTag
+  - RegistryId
+
+phases:
+  pre_build:
+    commands:
+      - echo Fri Jan 24 22:49:00 UTC 2020
+      - pwd
+      - ls
+  build:
+    commands:
+      - |
+        nohup vmstat 2> vmstat.out &
+      - sleep 6s
+      - echo Fri Jan 24 22:49:00 UTC 2020
+      - printenv | egrep '^GIT.*|^CANDIDATE_ID.*'
+      - cat vmstat.out
+      - ImageURI='123213232.docker-priv.test.com/nginx'
+      - ImageDigest='sha256@aabdskkh1233h2lkskldhl23h2l1k31skds899ufg'
+      - |
+        ImageTag=`echo $GIT_COMMIT_ID | cut -c 1-8`
+      - RegistryId=123213232
+

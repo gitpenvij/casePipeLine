@@ -1,0 +1,72 @@
+Description: Release Engineering Delivery Pipeline
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  NamespaceSource:
+    Type: String
+    Default: 'SourceVariables'
+  FullEnv:
+    Type: String
+    Default: Test
+  AppName:
+    Type: String
+    Default: App
+  ArtifactStore:
+    Type: String
+    Default: nobucket
+  OAuthToken:
+    Type: String
+Resources:
+  CodePipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      Name: !Sub '${FullEnv}-${AppName}-pipeline'
+      RoleArn: !Sub 'arn:aws:iam::${AWS::AccountId}:role/service-role/AWSCodePipelineServiceRole-us-east-1-GitHUbVariables'
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactStore
+      Stages:
+        - Name: !Sub 'novu-${AppName}-repository'
+          Actions:
+            - Name: SourceAction
+              Namespace: !Sub '${AppName}-Novu-Source-Variables'
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: '1'
+              RunOrder: 1
+              Configuration:
+                Branch: master
+                OAuthToken: !Ref OAuthToken
+                Owner: gitpenvij
+                PollForSourceChanges: false
+                Repo: casePipeLine
+              OutputArtifacts:
+                - Name: SourceArtifact
+              InputArtifacts: []
+              Region: !Ref 'AWS::Region'
+        - Name: !Sub '${AppName}-build'
+          Actions:
+            - Name: Build
+              Namespace: !Sub '${AppName}-Build-Variables'
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              RunOrder: 2
+              Configuration:
+                ProjectName: CaseBuild
+                EnvironmentVariables: !Sub >-
+                  [
+                  {"name":"CANDIDATE_ID","type":"PLAINTEXT","value":"#{codepipeline.PipelineExecutionId}"},
+                  {"name":"GIT_COMMIT_ID","type":"PLAINTEXT","value":"#{${AppName}-Novu-Source-Variables.CommitId}"},
+                  {"name":"GIT_AUTHOR_DATE","type":"PLAINTEXT","value":"#{${AppName}-Novu-Source-Variables.AuthorDate}"},
+                  {"name":"GIT_BRANCH_NAME","type":"PLAINTEXT","value":"#{${AppName}-Novu-Source-Variables.BranchName}"},
+                  {"name":"GIT_COMMIT_MESSAGE","type":"PLAINTEXT","value":"#{${AppName}-Novu-Source-Variables.CommitMessage}"}
+                  ]
+              OutputArtifacts:
+                - Name: BuildArtifact
+              InputArtifacts:
+                - Name: SourceArtifact
+              Region: !Ref 'AWS::Region'
