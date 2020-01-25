@@ -35,7 +35,8 @@ phases:
       # - command
   build:
     commands:
-      - nohup vmstat 2 > vmstat.out && disown $! 
+      - |
+        nohup vmstat 2> vmstat.out & disown $!
       - sleep 60s
       - echo Fri Jan 24 22:49:00 UTC 2020
       - printenv | egrep '^GIT.*|^CANDIDATE_ID.*'
