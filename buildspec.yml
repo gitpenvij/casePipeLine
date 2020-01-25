@@ -43,7 +43,7 @@ phases:
       - cat vmstat.out
       - ImageURI='123213232.docker-priv.test.com/nginx'
       - ImageDigest='sha256@aabdskkh1233h2lkskldhl23h2l1k31skds899ufg'
-      - ImageTag="${CommitId}"
+      - ImageTag=${GIT_COMMIT_ID:0:8}
       - RegistryId=123213232
       # - command
       # - command
